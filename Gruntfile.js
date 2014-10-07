@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
     // Lint definitions
     jshint: {
-      files: ["src/dmakLoader.js", "src/dmak.js", "src/jquery.dmak.js"],
+      files: ["bin/*"],
       options: {
         jshintrc: ".jshintrc"
       }
