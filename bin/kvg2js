@@ -1,0 +1,88 @@
+#!/usr/bin/env node
+var argv = require('yargs')
+  .usage('Usage: $0 [DIRECTORY]')
+  .argv;
+
+var fs = require('fs');
+var xml2js = require('xml2js').Parser();
+var path = require('path');
+var dir = argv._[0] || '.';
+var absolutePath = path.resolve(dir);
+var distAbsolutePath = absolutePath + path.sep + 'js';
+
+if(fs.existsSync(absolutePath)) {
+  run();
+} else {
+  console.error('Path ' + dir + ' does not exist');
+  process.exit(-1);
+}
+
+function run() {
+  var filenames = fs.readdirSync(absolutePath);
+  if(!fs.existsSync(distAbsolutePath)) {
+    fs.mkdirSync(distAbsolutePath);
+  }
+
+  for (var i = 0; i < filenames.length; i++) {
+    if(filenames[i].substr(-3) != "svg") continue;
+
+    process(filenames[i]);
+  }
+}
+
+
+function process(filename) {
+  fs.readFile(absolutePath + path.sep + filename, 'utf8', function(err, data) {
+    if (err) throw err;
+
+    xml2js.parseString(data, function (err, result) {
+      if (err) throw err;
+
+      fs.writeFile(distAbsolutePath + path.sep + filename.replace(/svg$/, 'js'), JSON.stringify(parse(result.svg)), function (err) {
+        if (err) throw err;
+      });
+    });
+  });
+}
+
+
+function parse(svg) {
+  var data = [],
+      groups = [];
+
+  // Private recursive function to parse XML node
+  function __parse(node) {
+    var i = 0;
+
+    if(typeof node.g != 'undefined') {
+      for(i = 0; i < node.g.length; i++) {
+        groups.push(node.g[i].$.id);
+        __parse(node.g[i]);
+        groups.splice(groups.indexOf(node.g[i].$.id), 1);
+      }
+    }
+
+    if(typeof node.path != 'undefined') {
+      for(i = 0; i < node.path.length; i++) {
+        data.push({
+          "path" : node.path[i].$.d,
+          "groups" : groups.slice(0)
+        });
+      }
+    }
+  }
+
+  // Start parsing
+  __parse(svg.g[0].g[0]);
+
+  // And finally add order mark information
+  for (i = 0; i < svg.g[1].text.length; i++) {
+    data[i].text = {
+      "value" : svg.g[1].text[i]._,
+      "x" : svg.g[1].text[i].$.transform.split(" ")[4],
+      "y" : svg.g[1].text[i].$.transform.split(" ")[5].replace(")", "")
+    };
+  }
+
+  return data;
+}

@@ -1,0 +1,36 @@
+{
+	"name": "kanjivg-parser",
+	"version": "0.0.1",
+	"description": "A simple KanjiVG parser for Javascript",
+	"main": "bin/kvg2js",
+	"bin": {
+		"kvg2js": "bin/kvg2js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/mbilbille/kanjivg-parser.git"
+	},
+	"keywords": [
+		"kanji",
+		"parser"
+	],
+	"author": "Matthieu Bilbille",
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://github.com/mbilbille/kanjivg-parser/blob/master/LICENSE"
+		}
+	],
+	"bugs": {
+		"url": "https://github.com/mbilbille/kanjivg-parser/issues"
+	},
+	"homepage": "http://kanjivg.tagaini.net/",
+	"dependencies": {
+		"yargs": "~1.3.0",
+		"xml2js": "~0.4.0"
+	},
+	"devDependencies": {
+		"grunt": "~0.4.5",
+		"grunt-contrib-jshint": "~0.10.0"
+	}
+}
