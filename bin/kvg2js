@@ -17,6 +17,14 @@ if(fs.existsSync(absolutePath)) {
   process.exit(-1);
 }
 
+// @TODO: Add options
+// To parse data into a single file
+// To either extract data into a JS or JSON file
+
+/**
+ * Main function
+ * Runs over each SVG files, extract data and generate a JS file.
+ */
 function run() {
   var filenames = fs.readdirSync(absolutePath);
   if(!fs.existsSync(distAbsolutePath)) {
@@ -32,7 +40,9 @@ function run() {
   }
 }
 
-
+/**
+ * Parse a single SVG file and save data into a JS file.
+ */ 
 function parse(filename) {
   fs.readFile(absolutePath + path.sep + filename, "utf8", function(err, data) {
     if (err) {
@@ -43,7 +53,10 @@ function parse(filename) {
       if (err) {
         throw err;
       }
-      fs.writeFile(distAbsolutePath + path.sep + filename.replace(/svg$/, "js"), "var " + filename.replace(/.svg$/, "") + "=" + JSON.stringify(extract(result.svg)), function (err) {
+      
+      var jsData = "var " + filename.replace(/.svg$/, "") + "=" + JSON.stringify(extract(result.svg));
+      
+      fs.writeFile(distAbsolutePath + path.sep + filename.replace(/svg$/, "js"), jsData, function (err) {
         if (err) {
           throw err;
         }
@@ -52,7 +65,9 @@ function parse(filename) {
   });
 }
 
-
+/**
+ * Extract information from the SVG node.
+ */
 function extract(svg) {
   var data = [],
       groups = [];
@@ -79,11 +94,11 @@ function extract(svg) {
     }
   }
 
-  // Start parsing
+  // Dive recursively into the SVG node, to get paths and groups data.
   __extract(svg.g[0].g[0]);
 
-  // And finally add order mark information
-  for (i = 0; i < svg.g[1].text.length; i++) {
+  // Order marks are handle separately
+  for (var i = 0; i < svg.g[1].text.length; i++) {
     data[i].text = {
       "value" : svg.g[1].text[i]._,
       "x" : svg.g[1].text[i].$.transform.split(" ")[4],
