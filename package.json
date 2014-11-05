@@ -1,5 +1,5 @@
 {
-	"name": "kanjivg-parser",
+	"name": "kvg2js",
 	"version": "0.0.1",
 	"description": "A simple KanjiVG parser for Javascript",
 	"main": "bin/kvg2js",
@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/mbilbille/kanjivg-parser.git"
+		"url": "git@github.com:mbilbille/kvg2js.git"
 	},
 	"keywords": [
 		"kanji",
@@ -18,11 +18,11 @@
 	"licenses": [
 		{
 			"type": "MIT",
-			"url": "https://github.com/mbilbille/kanjivg-parser/blob/master/LICENSE"
+			"url": "https://github.com/mbilbille/kvg2js/blob/master/LICENSE"
 		}
 	],
 	"bugs": {
-		"url": "https://github.com/mbilbille/kanjivg-parser/issues"
+		"url": "https://github.com/mbilbille/kvg2js/issues"
 	},
 	"homepage": "http://kanjivg.tagaini.net/",
 	"dependencies": {
