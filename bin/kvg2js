@@ -42,7 +42,7 @@ function run() {
 
 /**
  * Parse a single SVG file and save data into a JS file.
- */ 
+ */
 function parse(filename) {
   fs.readFile(absolutePath + path.sep + filename, "utf8", function(err, data) {
     if (err) {
@@ -53,9 +53,9 @@ function parse(filename) {
       if (err) {
         throw err;
       }
-      
-      var jsData = "var " + filename.replace(/.svg$/, "") + "=" + JSON.stringify(extract(result.svg));
-      
+
+      var jsData = "var _" + filename.replace(/.svg$/, "") + "=" + JSON.stringify(extract(result.svg));
+
       fs.writeFile(distAbsolutePath + path.sep + filename.replace(/svg$/, "js"), jsData, function (err) {
         if (err) {
           throw err;
